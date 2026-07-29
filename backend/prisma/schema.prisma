@@ -1,0 +1,225 @@
+// backend/prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String?
+  password      String
+  role          String   // e.g., ADMIN, PHARMACIST, TECHNICIAN, RECEPTIONIST
+  mfaSecret     String?
+  mfaEnabled    Boolean @default(false)
+  resetToken    String?
+  resetTokenExpires DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  // Relations
+  patients      Patient[] @relation("PatientCreatedBy")
+  updatedPatients Patient[] @relation("PatientUpdatedBy")
+  consultations Consultation[] @relation("ConsultationCreatedBy")
+  updatedConsultations Consultation[] @relation("ConsultationUpdatedBy")
+  prescriptions Prescription[] @relation("PrescriptionCreatedBy")
+  updatedPrescriptions Prescription[] @relation("PrescriptionUpdatedBy")
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Patient {
+  id            String   @id @default(uuid())
+  nhsNumber     String   @unique
+  firstName     String
+  lastName      String
+  dateOfBirth   DateTime
+  gender        String   // MALE, FEMALE, OTHER
+  phone         String?
+  email         String?
+  addressLine1  String
+  addressLine2  String?
+  city          String
+  postcode      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     User     @relation("PatientCreatedBy", fields: [createdById], references: [id])
+  createdById   String
+  updatedBy     User?    @relation("PatientUpdatedBy", fields: [updatedById], references: [id])
+  updatedById   String?
+  // Relations
+  consultations Consultation[]
+  prescriptions Prescription[]
+}
+
+model Medicine {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  strength    String?
+  form        String?  // e.g., Tablet, Capsule, Injection
+  isControlled Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  // Relations
+  prescriptions Prescription[]
+}
+
+model Consultation {
+  id            String   @id @default(uuid())
+  patient       Patient  @relation(fields: [patientId], references: [id])
+  patientId     String
+  doctor        User     @relation(fields: [doctorId], references: [id])
+  doctorId      String
+  consultationDate DateTime
+  notes         String?
+  status        String   // e.g., SCHEDULED, IN_PROGRESS, COMPLETED, CANCELLED
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     User     @relation("ConsultationCreatedBy", fields: [createdById], references: [id])
+  createdById   String
+  updatedBy     User?    @relation("ConsultationUpdatedBy", fields: [updatedById], references: [id])
+  updatedById   String?
+  // Relations
+  prescription  Prescription?
+}
+
+model Prescription {
+  id            String   @id @default(uuid())
+  consultation  Consultation @relation(fields: [consultationId], references: [id])
+  consultationId String
+  patient       Patient  @relation(fields: [patientId], references: [id])
+  patientId     String
+  prescriptionNumber String @unique
+  status        String   // e.g., DRAFT, PENDING_REVIEW, READY_FOR_DIGITAL_SIGNATURE, SIGNED, PHARMACY_SELECTED, EMAIL_PREVIEW, MFA_VERIFIED, SENT, DELIVERED, COMPLETED
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     User     @relation("PrescriptionCreatedBy", fields: [createdById], references: [id])
+  createdById   String
+  updatedBy     User?    @relation("PrescriptionUpdatedBy", fields: [updatedById], references: [id])
+  updatedById   String?
+  // Relations from Phase 5
+  digitalSignature DigitalSignature?
+  pdfMetadata      PDFMetadata?
+  qrCode           QRCode?
+  emailTransmissions EmailTransmission[]
+  deliveryStatus   DeliveryStatus?
+  notifications    Notification[]
+}
+
+model DigitalSignature {
+  id          String   @id @default(uuid())
+  prescriptionId String
+  signatureData String // Base64 or URL to stored signature
+  signedBy    String   // User ID of the signer
+  signedAt    DateTime @default(now())
+  ipAddress   String?
+  userAgent   String?
+  // Additional metadata
+  fullName    String?
+  gphcNumber  String?
+  reason      String?
+  prescription Prescription @relation(fields: [prescriptionId], references: [id])
+}
+
+model Pharmacy {
+  id            String   @id @default(uuid())
+  odsCode       String   @unique
+  name          String
+  address       String
+  city          String
+  postcode      String
+  country       String   @default("UK")
+  latitude      Float
+  longitude     Float
+  email         String?
+  phone         String?
+  website       String?
+  openingHours  Json     // Store as JSON for flexibility
+  supportsPrivatePrescriptions Boolean @default(true)
+  supportsControlledDrugs Boolean @default(false)
+  offersDelivery Boolean @default(false)
+  isPreferred   Boolean @default(false)
+  isActive      Boolean @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model EmailTransmission {
+  id            String   @id @default(uuid())
+  prescriptionId String
+  recipient     String   // Email address
+  subject       String
+  htmlBody      String
+  textBody      String?
+  status        String   // queued, sending, sent, delivered, opened, rejected, failed
+  attempts      Int      @default(0)
+  lastAttempted DateTime?
+  sentAt        DateTime?
+  deliveredAt   DateTime?
+  openedAt      DateTime?
+  error         String?
+  prescription  Prescription @relation(fields: [prescriptionId], references: [id])
+}
+
+model DeliveryStatus {
+  id            String   @id @default(uuid())
+  prescriptionId String
+  status        String   // queued, sending, sent, delivered, opened, rejected, failed
+  updatedAt     DateTime @updatedAt
+  trackingInfo  Json?    // For carrier tracking details
+  prescription  Prescription @relation(fields: [prescriptionId], references: [id])
+}
+
+model EmailTemplate {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  subject       String
+  htmlBody      String
+  textBody      String?
+  isActive      Boolean @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Notification {
+  id            String   @id @default(uuid())
+  userId        String   // Assuming we have a User model from authentication
+  type          String   // email, in-app, etc.
+  title         String
+  body          String
+  isRead        Boolean @default(false)
+  relatedId     String?  // e.g., prescriptionId, transmissionId
+  relatedType   String?  // e.g., 'prescription', 'transmission'
+  createdAt     DateTime @default(now())
+}
+
+model QRCode {
+  id            String   @id @default(uuid())
+  prescriptionId String
+  data          String   // The encoded data (e.g., prescription reference, version, timestamp, hash)
+  imageUrl      String   // URL to the stored QR code image
+  generatedAt   DateTime @default(now())
+  prescription  Prescription @relation(fields: [prescriptionId], references: [id])
+}
+
+model PDFMetadata {
+  id            String   @id @default(uuid())
+  prescriptionId String
+  fileUrl       String   // URL to the stored PDF
+  volume        Int      @default(1)
+  generatedAt   DateTime @default(now())
+  prescription  Prescription @relation(fields: [prescriptionId], references: [id])
+}
