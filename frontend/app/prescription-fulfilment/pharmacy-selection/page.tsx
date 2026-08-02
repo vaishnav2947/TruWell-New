@@ -1,7 +1,8 @@
-export const metadata = {
-  title: 'Select Pharmacy',
-  description: 'Select a pharmacy to send the prescription to',
-};
+"use client";
+
+import { Card } from '@/components/card';
+import { Button } from '@/components/button';
+import { Search, Filter, MapPin, Star, Clock, Phone } from 'lucide-react';
 
 export default function PharmacySelectionPage() {
   return (

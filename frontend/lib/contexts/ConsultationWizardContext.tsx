@@ -63,7 +63,7 @@ const initialState: ConsultationWizardState = {
     isSaving: false,
     lastSaved: null,
     saveError: null,
-    isOnline: navigator.onLine
+    isOnline: typeof window !== 'undefined' ? navigator.onLine : true
   },
   hasUnsavedChanges: false,
   timeline: [],
@@ -131,7 +131,7 @@ function consultationWizardReducer(state: ConsultationWizardState, action: Consu
         initialPatient: state.initialPatient,
         saveStatus: {
           ...initialState.saveStatus,
-          isOnline: navigator.onLine
+          isOnline: typeof window !== 'undefined' ? navigator.onLine : true
         }
       };
     case 'LOAD_DRAFT':
@@ -222,8 +222,7 @@ export const ConsultationWizardProvider = ({ children }: { children: React.React
     }, [state.currentStep, state.formData, state.patient, state.hasUnsavedChanges, state.timeline, state.auditTrail, dispatch]);
 
     // Save on step change or form data change (we'll rely on the reducer setting hasUnsavedChanges)
-    // We'll also set up setInterval setInterval = setInterval(() => {
-      if (state.hasUnsaved auto-save interval
+    // We'll also set up auto-save interval
     const interval = setInterval(() => {
       if (state.hasUnsavedChanges) {
         handleSave();

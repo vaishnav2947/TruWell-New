@@ -36,7 +36,7 @@ export class MfaService {
 
     if (method === 'authenticator') {
       const verified = speakeasy.totp.verify({
-        secret,
+        secret: secret || '',
         encoding: 'base32',
         token,
         window: 1, // Allow for time drift

@@ -1,7 +1,8 @@
-export const metadata = {
-  title: 'Email Preview',
-  description: 'Preview and edit the email to be sent to the pharmacy',
-};
+"use client";
+
+import { Button } from '@/components/button';
+import { Card } from '@/components/card';
+import { FileText, Download } from 'lucide-react';
 
 export default function EmailPreviewPage() {
   return (
@@ -81,7 +82,7 @@ export default function EmailPreviewPage() {
           <div className="space-y-2">
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
               <div className="flex items-center space-x-3">
-                <Picture className="h-5 w-5" />
+                <FileText className="h-5 w-5" />
                 <div>
                   <p className="font-medium">Prescription_RX123456.pdf</p>
                   <p className="text-sm text-gray-500">PDF | 245 KB</p>
@@ -109,7 +110,6 @@ export default function EmailPreviewPage() {
         </Card>
 
         {/* Preview */}
-        <Card */}
         <Card>
           <h2 className="text-lg font-medium text-gray-800 mb-4">Email Preview</h2>
           <div className="bg-white border rounded-lg p-4 max-h-96 overflow-y-auto">

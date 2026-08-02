@@ -1,4 +1,5 @@
-// frontend/app/patients/new/page.tsx
+"use client";
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -127,7 +128,8 @@ export default function NewPatientPage() {
                   })}
                 />
                 {errors.firstName && (
-                  }
+                  <p className="text-sm text-red-600">{errors.firstName.message}</p>
+                )}
               </div>
               <div className="space-y-4">
                 <Label htmlFor="lastName">Last Name</Label>
@@ -155,15 +157,7 @@ export default function NewPatientPage() {
                     required: 'Date of birth is required'
                   })}
                 />
-                {errors.dateOfBirth && (
-                    value: string | Date | null,
-                    validation: boolean
-                  ) => ({
-                    value: value instanceof Date ? value.toISOString().split('T')[0] : value || '',
-                    onChange: (e) => {
-                      // Handle date input change
-                    }
-                  })} />
+
                 {errors.dateOfBirth && (
                   <p className="text-sm text-red-600">{errors.dateOfBirth.message}</p>
                 )}

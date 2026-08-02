@@ -82,7 +82,7 @@ export default function SignaturePage() {
       // For now, we'll go to pharmacy selection
       router.push(`/prescription-fulfilment/pharmacy-selection/${prescriptionId}`);
     } catch (err) {
-      setError('Failed to capture signature');
+      setErrorState('Failed to capture signature');
     } finally {
       setIsSigning(false);
     }

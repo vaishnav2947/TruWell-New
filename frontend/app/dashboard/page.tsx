@@ -1,11 +1,12 @@
-// frontend/app/dashboard/page.tsx
+"use client";
+
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/lib/stores/auth.store';
 import { Button } from '@/components/button';
 import { Card } from '@/components/card';
 import { Badge } from '@/components/badge';
 import { Loader } from '@/components/loader';
-import { User } from 'lucide-react';
+import { User, FileText, ClipboardList, CheckCircle, Mail } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user } = useAuthStore.getState();
@@ -252,16 +253,16 @@ export default function DashboardPage() {
               Quick Actions
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <Button variant="primary" onClick={() => /* Navigate to new patient */}>
+              <Button variant="primary" onClick={() => {}}>
                 New Patient
               </Button>
-              <Button variant="primary" onClick={() => /* Navigate to new consultation */}>
+              <Button variant="primary" onClick={() => {}}>
                 New Consultation
               </Button>
-              <Button variant="primary" onClick={() => /* Navigate to new prescription */}>
+              <Button variant="primary" onClick={() => {}}>
                 New Prescription
               </Button>
-              <Button variant="primary" onClick={() => /* Navigate to pharmacy finder */}>
+              <Button variant="primary" onClick={() => {}}>
                 Find Pharmacy
               </Button>
             </div>

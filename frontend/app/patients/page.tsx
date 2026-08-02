@@ -1,4 +1,5 @@
-// frontend/app/patients/page.tsx
+"use client";
+
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/lib/stores/auth.store';
 import { Button } from '@/components/button';
@@ -167,9 +168,9 @@ export default function PatientsPage() {
                         {patient.mrn}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex items-center space-x-2">
-                        <div className="flex-shrink-0 h-5 w-5 {
+                        <div className={`flex-shrink-0 h-5 w-5 ${
                           patient.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                        } rounded-full flex items-center justify-center text-xs">
+                        } rounded-full flex items-center justify-center text-xs`}>
                           {patient.status === 'active' ? '●' : '●'}
                         </div>
                         <div className="flex-1">
@@ -190,7 +191,7 @@ export default function PatientsPage() {
                           <Edit3 className="h-4 w-4 text-gray-500 hover:text-primary-600" />
                         </Link>
                         <button
-                          onClick={() => /* Handle delete */}
+                          onClick={() => {}}
                           className="ml-2 h-4 w-4 text-gray-500 hover:text-red-600"
                         >
                           <Trash2 className="h-4 w-4" />

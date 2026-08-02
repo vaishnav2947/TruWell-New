@@ -1,10 +1,11 @@
-// frontend/app/(auth)/layout.tsx
+"use client";
+
 import { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/auth.store';
-import { SidebarAuth } from '@/components/sidebar-auth'; // We'll create a simple sidebar for auth pages, or maybe no sidebar
-import { NavbarAuth } from '@/components/navbar-auth'; // We'll create a navbar for auth pages
+import { SidebarAuth } from '@/components/layout/sidebar-auth';
+import { NavbarAuth } from '@/components/layout/navbar-auth';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   const router = useRouter();

@@ -1,4 +1,5 @@
-// frontend/app/(auth)/login/page.tsx
+"use client";
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';

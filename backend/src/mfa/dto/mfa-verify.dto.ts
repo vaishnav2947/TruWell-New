@@ -1,5 +1,5 @@
 // backend/src/mfa/dto/mfa-verify.dto.ts
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class MfaVerifyDto {
   @IsString()

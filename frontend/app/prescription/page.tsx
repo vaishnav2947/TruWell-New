@@ -12,7 +12,7 @@ import { usePatient } from '@/lib/hooks/usePatient';
 import { useMedication } from '@/lib/hooks/useMedication';
 import { useSelectedPrescription } from '@/lib/contexts/SelectedPrescriptionContext';
 
-export function PrescriptionDashboard() {
+export default function PrescriptionDashboard() {
   const { prescriptions, loading, error, refresh } = usePrescription();
   const { setSelectedPrescription } = useSelectedPrescription();
   const router = useRouter();

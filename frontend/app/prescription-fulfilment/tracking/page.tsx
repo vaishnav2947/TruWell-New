@@ -1,7 +1,8 @@
-export const metadata = {
-  title: 'Tracking Details',
-  description: 'View detailed tracking information for the prescription',
-};
+"use client";
+
+import { Card } from '@/components/card';
+import { Button } from '@/components/button';
+import { CheckCircle, Clock, Package, Truck, MapPin, Phone, AlertTriangle, Download, RefreshCw, List } from 'lucide-react';
 
 export default function TrackingPage() {
   return (
@@ -148,9 +149,9 @@ export default function TrackingPage() {
                   alert('Resending prescription');
                 }}
               >
-                <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                <RefreshCw className="mr-2 h-3 w-3 animate-spin" />
                 Resend
-              </Button
+              </Button>
             </div>
             <div className="flex justify-between items-start">
               <div>

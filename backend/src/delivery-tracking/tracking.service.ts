@@ -1,5 +1,5 @@
 // backend/src/delivery-tracking/tracking.service.ts
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -15,19 +15,21 @@ export class TrackingService {
       throw new NotFoundException('Prescription not found');
     }
 
-    // Update or create delivery status
+    const currentStatus = await this.prisma.deliveryStatus.findUnique({ where: { prescriptionId } });
+    const existingInfo = (currentStatus?.trackingInfo as object) || {};
+
     const tracking = await this.prisma.deliveryStatus.upsert({
       where: { prescriptionId },
       update: {
         status,
         updatedAt: new Date(),
-        ...(details && { trackingInfo: { ...(await this.prisma.deliveryStatus.findUnique({ where: { prescriptionId } })?.trackingInfo || {}), ...details } }),
+        ...(details ? { trackingInfo: { ...existingInfo, ...details } } : {}),
       },
       create: {
         prescriptionId,
         status,
         updatedAt: new Date(),
-        ...(details && { trackingInfo: details }),
+        ...(details ? { trackingInfo: details } : {}),
       },
     });
 

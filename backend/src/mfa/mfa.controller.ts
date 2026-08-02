@@ -16,11 +16,6 @@ export class MfaController {
   @Post('verify')
   @UsePipes(new ValidationPipe())
   async verifyMfa(@Body() mfaVerifyDto: MfaVerifyDto) {
-    const { userId, token, method, secret } = mfaVerifyDto;
-    return this.mfaService.verifyMfa(userId, {
-      token,
-      method,
-      secret
-    });
+    return this.mfaService.verifyMfa(mfaVerifyDto.userId, mfaVerifyDto);
   }
 }

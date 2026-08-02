@@ -5,7 +5,7 @@ WORKDIR /app
 # ---- Dependencies ----
 FROM base AS deps
 RUN corepack enable
-COPY package.json ./
+COPY package.json package-lock.json* ./
 RUN npm ci
 
 # ---- Build ----

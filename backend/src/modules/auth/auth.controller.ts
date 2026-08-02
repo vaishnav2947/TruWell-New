@@ -9,7 +9,7 @@ import { MfaVerifyDto } from './dto/mfa-verify.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { RolesGuard } from './roles.guard';
 import { Roles } from './roles.decorator';
-import { UserRole } from '@prisma/client';
+import { UserRole } from './roles.enum';
 
 @Controller('auth')
 export class AuthController {

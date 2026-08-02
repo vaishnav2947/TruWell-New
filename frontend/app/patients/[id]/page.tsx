@@ -1,3 +1,5 @@
+"use client";
+
 // frontend/app/patients/[id]/page.tsx
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/lib/stores/auth.store';
@@ -6,13 +8,13 @@ import { Card } from '@/components/card';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
 import { Loader } from '@/components/loader';
-import { Users, Search, Calendar, Trash2, Edit3, FileText, ClipboardList, CalendarCheck, Folder, Activity, Mail } from 'lucide-react';
+import { Users, Search, Calendar, Trash2, Edit3, FileText, ClipboardList, CalendarCheck, Folder, Activity, Mail, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export default function PatientDetailsPage({ params }: { params: { id: string } }) {
   const { user } = useAuthStore.getState();
   const [loading, setLoading] = useState(true);
-  const [patient, setPatient] = useState(null);
+  const [patient, setPatient] = useState<any>(null);
   const [activeTab, setActiveTab] = useState('overview'); // overview, demographics, medical-history, medications, prescriptions, timeline, attachments
 
   // Fetch patient (mock data for now)
@@ -96,9 +98,9 @@ export default function PatientDetailsPage({ params }: { params: { id: string } 
               {patient.firstName} {patient.lastName}
             </h1>
             <div className="flex items-center space-x-3">
-              <span className="px-3 py-1 rounded-full text-xs font-medium {
+              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                 patient.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-              }">
+              }`}>
                 {patient.status === 'active' ? 'Active' : 'Inactive'}
               </span>
               <span className="text-sm text-gray-500">
@@ -118,7 +120,7 @@ export default function PatientDetailsPage({ params }: { params: { id: string } 
                 className={`${activeTab === 'overview'
                   ? 'border-b-2 border-primary-600 text-primary-600'
                   : 'border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } px-3 py-2 text-sm font-medium`
+                } px-3 py-2 text-sm font-medium`}
               >
                 Overview
               </button>
@@ -127,7 +129,7 @@ export default function PatientDetailsPage({ params }: { params: { id: string } 
                 className={`${activeTab === 'demographics'
                   ? 'border-b-2 border-primary-600 text-primary-600'
                   : 'border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } px-3 py-2 text-sm font-medium`
+                } px-3 py-2 text-sm font-medium`}
               >
                 Demographics
               </button>
@@ -136,7 +138,7 @@ export default function PatientDetailsPage({ params }: { params: { id: string } 
                 className={`${activeTab === 'medical-history'
                   ? 'border-b-2 border-primary-600 text-primary-600'
                   : 'border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } px-3 py-2 text-sm font-medium`
+                } px-3 py-2 text-sm font-medium`}
               >
                 Medical History
               </button>
@@ -145,7 +147,7 @@ export default function PatientDetailsPage({ params }: { params: { id: string } 
                 className={`${activeTab === 'medications'
                   ? 'border-b-2 border-primary-600 text-primary-600'
                   : 'border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } px-3 py-2 text-sm font-medium`
+                } px-3 py-2 text-sm font-medium`}
               >
                 Medications
               </button>
@@ -154,7 +156,7 @@ export default function PatientDetailsPage({ params }: { params: { id: string } 
                 className={`${activeTab === 'prescriptions'
                   ? 'border-b-2 border-primary-600 text-primary-600'
                   : 'border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } px-3 py-2 text-sm font-medium`
+                } px-3 py-2 text-sm font-medium`}
               >
                 Prescriptions
               </button>
@@ -163,7 +165,7 @@ export default function PatientDetailsPage({ params }: { params: { id: string } 
                 className={`${activeTab === 'timeline'
                   ? 'border-b-2 border-primary-600 text-primary-600'
                   : 'border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } px-3 py-2 text-sm font-medium`
+                } px-3 py-2 text-sm font-medium`}
               >
                 Timeline
               </button>
@@ -172,7 +174,7 @@ export default function PatientDetailsPage({ params }: { params: { id: string } 
                 className={`${activeTab === 'attachments'
                   ? 'border-b-2 border-primary-600 text-primary-600'
                   : 'border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } px-3 py-2 text-sm font-medium`
+                } px-3 py-2 text-sm font-medium`}
               >
                 Attachments
               </button>
@@ -306,7 +308,7 @@ export default function PatientDetailsPage({ params }: { params: { id: string } 
                         </p>
                         <p className="text-sm text-gray-500">
                           <span className="font-medium">Status:</span>
-                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium {
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                             pres.status === 'active' ? 'bg-green-100 text-green-800' :
                             pres.status === 'completed' ? 'bg-blue-100 text-blue-800' :
                             'bg-gray-100 text-gray-800'
@@ -323,47 +325,45 @@ export default function PatientDetailsPage({ params }: { params: { id: string } 
               </div>
             )}
             {activeTab === 'timeline' && (
-              className="space-y-6">
-                {patient.timelineEvents.length > 0 ? (
-                  <div className="space-y-6">
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-gray-800">Patient Timeline</h3>
-                      {patient.timelineEvents.length > 0 ? (
-                        <div className="space-y-3">
-                          {patient.timelineEvents.map((event) => (
-                            <div key={event.id} className="flex items-start space-x-4 p-3 bg-gray-50 rounded-lg">
-                              <div className="flex-shrink-0 h-8 w-8 {
-                                event.type === 'consultation' ? 'bg-blue-100 text-blue-600' :
-                                event.type === 'prescription' ? 'bg-green-100 text-green-600' :
-                                event.type === 'registration' ? 'bg-purple-100 text-purple-600' :
-                                'bg-gray-100 text-gray-500'
-                              } rounded-flex items-center justify-center">
-                                {event.type === 'consultation' ? (
-                                  <Activity className="h-4 w-4" />
-                                ) : event.type === 'prescription' ? (
-                                  <FileText className="h-4 w-4" />
-                                ) : event.type === 'registration' ? (
-                                  <Users className="h-4 w-4" />
-                                ) : (
-                                  <Calendar className="h-4 w-4" />
-                                )}
-                              </div>
-                              <div className="flex-1 space-y-1">
-                                <p className="text-sm font-medium text-gray-900">
-                                  {event.description}
-                                </p>
-                                <p className="text-xs text-gray-500">
-                                  {new Date(event.date).toLocaleDateString()}
-                                </p>
-                              </div>
-                            </div>
-                          ))}
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium text-gray-800">Patient Timeline</h3>
+                  {patient.timelineEvents.length > 0 ? (
+                    <div className="space-y-3">
+                      {patient.timelineEvents.map((event) => (
+                        <div key={event.id} className="flex items-start space-x-4 p-3 bg-gray-50 rounded-lg">
+                          <div className={`flex-shrink-0 h-8 w-8 ${
+                            event.type === 'consultation' ? 'bg-blue-100 text-blue-600' :
+                            event.type === 'prescription' ? 'bg-green-100 text-green-600' :
+                            event.type === 'registration' ? 'bg-purple-100 text-purple-600' :
+                            'bg-gray-100 text-gray-500'
+                          } rounded flex items-center justify-center`}>
+                            {event.type === 'consultation' ? (
+                              <Activity className="h-4 w-4" />
+                            ) : event.type === 'prescription' ? (
+                              <FileText className="h-4 w-4" />
+                            ) : event.type === 'registration' ? (
+                              <Users className="h-4 w-4" />
+                            ) : (
+                              <Calendar className="h-4 w-4" />
+                            )}
+                          </div>
+                          <div className="flex-1 space-y-1">
+                            <p className="text-sm font-medium text-gray-900">
+                              {event.description}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {new Date(event.date).toLocaleDateString()}
+                            </p>
+                          </div>
                         </div>
-                      ) : (
-                        <p className="text-center text-gray-500 py-8">No timeline events recorded</p>
-                      )}
+                      ))}
                     </div>
-                  </div>
+                  ) : (
+                    <p className="text-center text-gray-500 py-8">No timeline events recorded</p>
+                  )}
+                </div>
+              </div>
             )}
             {activeTab === 'attachments' && (
                   <div className="space-y-6">
@@ -373,7 +373,7 @@ export default function PatientDetailsPage({ params }: { params: { id: string } 
                         <div className="space-y-3">
                           {patient.attachments.map((attachment) => (
                             <div key={attachment.id} className="flex items-start space-x-4 p-3 bg-gray-50 rounded-lg">
-                              <div className="flex-shrink-0 h-8 w-8 bg-gray-100 text-gray-500 rounded-flex items-center justify-center">
+                              <div className="flex-shrink-0 h-8 w-8 bg-gray-100 text-gray-500 rounded flex items-center justify-center">
                                 <Folder className="h-4 w-4" />
                               </div>
                               <div className="flex-1 space-y-1">

@@ -1,17 +1,19 @@
+"use client";
+
 import { createContext, useContext, useState } from 'react';
 
 interface SelectedPrescriptionContextProps {
-  selectedPrescriptionId: string | null;
-  setSelectedPrescriptionId: (id: string | null) => void;
+  selectedPrescription: string | null;
+  setSelectedPrescription: (id: string | null) => void;
 }
 
 const SelectedPrescriptionContext = createContext<SelectedPrescriptionContextProps | undefined>(undefined);
 
 export const SelectedPrescriptionProvider = ({ children }: { children: React.ReactNode }) => {
-  const [selectedPrescriptionId, setSelectedPrescriptionId] = useState<string | null>(null);
+  const [selectedPrescription, setSelectedPrescription] = useState<string | null>(null);
 
   return (
-    <SelectedPrescriptionContext.Provider value={{ selectedPrescriptionId, setSelectedPrescriptionId }}>
+    <SelectedPrescriptionContext.Provider value={{ selectedPrescription, setSelectedPrescription }}>
       {children}
     </SelectedPrescriptionContext.Provider>
   );

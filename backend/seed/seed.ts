@@ -12,8 +12,8 @@ async function main() {
   await prisma.emailTransmission.deleteMany()
   await prisma.deliveryStatus.deleteMany()
   await prisma.digitalSignature.deleteMany()
-  await prisma.qrCode.deleteMany()
-  await prisma.pdfMetadata.deleteMany()
+  await prisma.qRCode.deleteMany()
+  await prisma.pDFMetadata.deleteMany()
   await prisma.prescription.deleteMany()
   await prisma.consultation.deleteMany()
   await prisma.patient.deleteMany()
@@ -69,6 +69,7 @@ async function main() {
   const patient1 = await prisma.patient.create({
     data: {
       id: 'patient-1',
+      createdById: admin.id,
       nhsNumber: '1234567890',
       firstName: 'John',
       lastName: 'Doe',
@@ -86,6 +87,7 @@ async function main() {
   const patient2 = await prisma.patient.create({
     data: {
       id: 'patient-2',
+      createdById: admin.id,
       nhsNumber: '0987654321',
       firstName: 'Jane',
       lastName: 'Smith',
@@ -139,7 +141,9 @@ async function main() {
     data: {
       id: 'consultation-1',
       patientId: patient1.id,
-      doctorName: 'Dr. Smith',
+      doctorId: admin.id,
+      createdById: admin.id,
+      status: 'COMPLETED',
       consultationDate: new Date('2024-01-15'),
       notes: 'Patient presents with headache and fever.',
     },
@@ -149,7 +153,9 @@ async function main() {
     data: {
       id: 'consultation-2',
       patientId: patient2.id,
-      doctorName: 'Dr. Jones',
+      doctorId: admin.id,
+      createdById: admin.id,
+      status: 'COMPLETED',
       consultationDate: new Date('2024-01-16'),
       notes: 'Patient requires antibiotics for infection.',
     },
@@ -161,6 +167,8 @@ async function main() {
       id: 'prescription-1',
       prescriptionNumber: 'RX000001',
       consultationId: consultation1.id,
+      patientId: patient1.id,
+      createdById: admin.id,
       status: 'READY_FOR_SIGNATURE', // This is the status that triggers Phase 5
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -172,6 +180,8 @@ async function main() {
       id: 'prescription-2',
       prescriptionNumber: 'RX000002',
       consultationId: consultation2.id,
+      patientId: patient2.id,
+      createdById: admin.id,
       status: 'ACTIVE', // Already signed, etc.
       createdAt: new Date(),
       updatedAt: new Date(),

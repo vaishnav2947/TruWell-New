@@ -1,8 +1,8 @@
-// frontend/app/consultation-wizard/page.tsx
 "use client";
+// frontend/app/consultation-wizard/page.tsx
 
 import { useEffect, useState, useCallback } from 'react';
-import { useConsultationWizard, useConsultationWizardActions } from '@/lib/contexts/ConsultationWizardContext';
+import { ConsultationWizardProvider, useConsultationWizard, useConsultationWizardActions } from '@/lib/contexts/ConsultationWizardContext';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/button';
 import { Card } from '@/components/card';
@@ -35,8 +35,8 @@ const Stepper = ({ currentStep, totalSteps }: { currentStep: number; totalSteps:
         </span>
         <div className="flex-1 h-0.5 bg-gray-200 rounded">
           <div
-            className={`h-0.5 bg-primary-600 rounded ${currentStep === totalSteps === 1 ? 'w-0' : `w-[${((currentStep - 1) / (totalSteps - 1)) * 100}%]`}`}
-            style={{ height: '0.5px' }}
+            className="h-0.5 bg-primary-600 rounded transition-all duration-300"
+            style={{ width: `${((currentStep - 1) / (totalSteps - 1)) * 100}%` }}
           />
         </div>
       </div>
@@ -125,30 +125,30 @@ const PatientBanner = ({ patient }: { patient: any | null }) => {
                 <span className="mr-2">⚠️</span> Patient Alerts
               </h3>
               <ul className="mt-2 space-y-1 text-sm">
-                {patient.allergies?.map(( allergy: string, index: number ) => (
-                  <li key=`allergy-${index}` className="flex items-start">
-                    <span className="mr-2">•</span">•</span
-Allergy:> >{/*)}
+                {patient.allergies?.map((allergy: string, index: number) => (
+                  <li key={`allergy-${index}`} className="flex items-start">
+                    <span className="mr-2">•</span>
+                    <span>Allergy: {allergy}</span>
+                  </li>
+                ))}
+                {patient.highRiskMedicines?.map((med: string, index: number) => (
+                  <li key={`hrm-${index}`} className="flex items-start">
+                    <span className="mr-2">•</span>
+                    <span>High Risk Medicine: {med}</span>
+                  </li>
+                ))}
+                {patient.existingConditions?.map((condition: string, index: number) => (
+                  <li key={`condition-${index}`} className="flex items-start">
+                    <span className="mr-2">•</span>
+                    <span>Condition: {condition}</span>
+                  </li>
+                ))}
 
-  patient.highRiskMedicines?.map(( med: string, index: number ) => (
-    <li key={`hrm-${index}`} className="flex items-start">
-      <span className="mr-_2ellipsis">•</span
-      <span>High Risk Medicine: {med}</span
-    >
-    />
-  ))}
-  patient.existingConditions?.map(( condition: string, index: number ) => (
-    <li key={`condition-${index}`} className="flex items-start">
-      <span className="mr-_2ellipsis">•</span
-      <span>Condition: {condition}</span
-    >
-    />
-  ))}
-
-            </ul>
-          </div>
-        )
-      }
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
@@ -381,7 +381,7 @@ export default function ConsultationWizardPage() {
                   <p>Loading patient data...</p>
                 )}
               </div>
-            </div>
+            </Card>
           </div>
         </main>
       </div>
@@ -653,7 +653,7 @@ const ConsultationDetailsStep = ({ onUpdate, onValidated }: {
             max="120"
           />
         </div>
-      }
+      </div>
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Chief Complaint *</label>
@@ -1601,53 +1601,53 @@ const ConsentStep = ({ onUpdate, onValidated }: {
           <label className="flex items-center space-x-2">
             <input
               type="checkbox"
-              checked={consent.privacyConsent>
-                onChange={handleChange}
-                name="privacyConsent"
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-              />
-              <span className="text-sm font-medium text-gray-700">
-                I consent to the collection, use, and disclosure of my personal health information
-                in accordance with the clinic's privacy policy and applicable data protection laws.
-              </span>
-            </label>
-          </div>
-          <div>
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={consent.ePrescriptionConsent>
-                  onChange={handleChange}
-                  name="ePrescriptionConsent"
-                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                />
-                <span className="text-sm font-medium text-gray-700">
-                  I consent to receive electronic prescriptions (e-prescriptions) instead of paper prescriptions.
-                </span>
-              </label>
-            </div>
-            <div>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={consent.remoteConsultationConsent>
-                    onChange={handleChange}
-                    name="remoteConsultationConsent"
-                    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                  />
-                  <span className="text-sm font-medium text-gray-700">
-                    I consent to conduct this consultation remotely (via telephone or video) if deemed appropriate.
-                  </span>
-                </label>
-              </div>
-              <div>
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={consent.marketingConsent>
-                      onChange={handleChange}
-                      name="marketingConsent"
-                      className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              checked={consent.privacyConsent}
+              onChange={handleChange}
+              name="privacyConsent"
+              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+            />
+            <span className="text-sm font-medium text-gray-700">
+              I consent to the collection, use, and disclosure of my personal health information
+              in accordance with the clinic's privacy policy and applicable data protection laws.
+            </span>
+          </label>
+        </div>
+        <div>
+          <label className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              checked={consent.ePrescriptionConsent}
+              onChange={handleChange}
+              name="ePrescriptionConsent"
+              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+            />
+            <span className="text-sm font-medium text-gray-700">
+              I consent to receive electronic prescriptions (e-prescriptions) instead of paper prescriptions.
+            </span>
+          </label>
+        </div>
+        <div>
+          <label className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              checked={consent.remoteConsultationConsent}
+              onChange={handleChange}
+              name="remoteConsultationConsent"
+              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+            />
+            <span className="text-sm font-medium text-gray-700">
+              I consent to conduct this consultation remotely (via telephone or video) if deemed appropriate.
+            </span>
+          </label>
+        </div>
+        <div>
+          <label className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              checked={consent.marketingConsent}
+              onChange={handleChange}
+              name="marketingConsent"
+              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                     />
                     <span className="text-sm font-medium text-gray-700">
                       I consent to receive information about health services, promotions, and educational materials
@@ -1776,7 +1776,6 @@ const ConsultationOutcomeStep = ({ onUpdate, onValidated }: {
                   value={outcome.followUpDetails}
                   onChange={handleChange}
                   className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  rows="2"
                   rows="3"
                 />
               </div>
@@ -2004,10 +2003,12 @@ const ReviewStep = ({ state, onUpdate }: {
                 <p className="text-sm"><strong>Notes:</strong> {state.formData['8'].outcomeNotes}</p>
               )}
               {state.formData['8'].followUpRequired && (
-                <p className="text-sm"><strong>Follow-up Required:</strong> Yes</p>
-                {state.formData['8'].followUpDetails && (
-                  <p className="text-sm"><strong>Details:</strong> {state.formData['8'].followUpDetails}</p>
-                )}
+                <>
+                  <p className="text-sm"><strong>Follow-up Required:</strong> Yes</p>
+                  {state.formData['8'].followUpDetails && (
+                    <p className="text-sm"><strong>Details:</strong> {state.formData['8'].followUpDetails}</p>
+                  )}
+                </>
               )}
               {state.formData['8'].outcomeType.startsWith('refer_') && (
                 <p className="text-sm"><strong>Referral Reason:</strong> {state.formData['8'].referralReason}</p>

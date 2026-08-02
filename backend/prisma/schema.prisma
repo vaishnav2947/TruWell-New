@@ -25,6 +25,7 @@ model User {
   updatedPatients Patient[] @relation("PatientUpdatedBy")
   consultations Consultation[] @relation("ConsultationCreatedBy")
   updatedConsultations Consultation[] @relation("ConsultationUpdatedBy")
+  doctorConsultations Consultation[] @relation("DoctorConsultations")
   prescriptions Prescription[] @relation("PrescriptionCreatedBy")
   updatedPrescriptions Prescription[] @relation("PrescriptionUpdatedBy")
   refreshTokens RefreshToken[]
@@ -81,7 +82,7 @@ model Consultation {
   id            String   @id @default(uuid())
   patient       Patient  @relation(fields: [patientId], references: [id])
   patientId     String
-  doctor        User     @relation(fields: [doctorId], references: [id])
+  doctor        User     @relation("DoctorConsultations", fields: [doctorId], references: [id])
   doctorId      String
   consultationDate DateTime
   notes         String?
@@ -99,7 +100,7 @@ model Consultation {
 model Prescription {
   id            String   @id @default(uuid())
   consultation  Consultation @relation(fields: [consultationId], references: [id])
-  consultationId String
+  consultationId String @unique
   patient       Patient  @relation(fields: [patientId], references: [id])
   patientId     String
   prescriptionNumber String @unique
@@ -117,11 +118,13 @@ model Prescription {
   emailTransmissions EmailTransmission[]
   deliveryStatus   DeliveryStatus?
   notifications    Notification[]
+  medicineId       String?
+  medicine         Medicine? @relation(fields: [medicineId], references: [id])
 }
 
 model DigitalSignature {
   id          String   @id @default(uuid())
-  prescriptionId String
+  prescriptionId String @unique // Base64 or URL to stored signature
   signatureData String // Base64 or URL to stored signature
   signedBy    String   // User ID of the signer
   signedAt    DateTime @default(now())
@@ -176,7 +179,7 @@ model EmailTransmission {
 
 model DeliveryStatus {
   id            String   @id @default(uuid())
-  prescriptionId String
+  prescriptionId String @unique
   status        String   // queued, sending, sent, delivered, opened, rejected, failed
   updatedAt     DateTime @updatedAt
   trackingInfo  Json?    // For carrier tracking details
@@ -204,11 +207,13 @@ model Notification {
   relatedId     String?  // e.g., prescriptionId, transmissionId
   relatedType   String?  // e.g., 'prescription', 'transmission'
   createdAt     DateTime @default(now())
+  prescriptionId String?
+  prescription   Prescription? @relation(fields: [prescriptionId], references: [id])
 }
 
 model QRCode {
   id            String   @id @default(uuid())
-  prescriptionId String
+  prescriptionId String @unique
   data          String   // The encoded data (e.g., prescription reference, version, timestamp, hash)
   imageUrl      String   // URL to the stored QR code image
   generatedAt   DateTime @default(now())
@@ -217,7 +222,7 @@ model QRCode {
 
 model PDFMetadata {
   id            String   @id @default(uuid())
-  prescriptionId String
+  prescriptionId String @unique
   fileUrl       String   // URL to the stored PDF
   volume        Int      @default(1)
   generatedAt   DateTime @default(now())

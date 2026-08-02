@@ -30,7 +30,8 @@ export class SignatureService {
       data: {
         prescriptionId,
         signatureData, // This would be the image data or URL
-        pharmacistName,
+        signedBy: pharmacistName || 'unknown',
+        fullName: pharmacistName,
         gphcNumber,
         signedAt: new Date(),
         reason,

@@ -45,6 +45,7 @@ services:
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-truwell}:${POSTGRES_PASSWORD:-truwellpass}@truwell-postgres:5432/${POSTGRES_DB:-truwell}?schema=public
       REDIS_URL: redis://truwell-redis:6379
+      PORT: 3000
     expose:
       - "3000"
     depends_on:
@@ -88,4 +89,4 @@ services:
 
 volumes:
   postgres_data:
-  redis_data:
+    redis_data:

@@ -1,7 +1,8 @@
-export const metadata = {
-  title: 'MFA Verification',
-  description: 'Verify your identity using multi-factor authentication',
-};
+"use client";
+
+import { Card } from '@/components/card';
+import { Button } from '@/components/button';
+import { Mail, Phone, RefreshCw, HardDrive } from 'lucide-react';
 
 export default function MFAVerificationPage() {
   return (

@@ -150,10 +150,6 @@ export default function NewPrescriptionPage() {
                 min="1"
                 max="365"
               />
-            </div
-Let's continue writing the file. We'll cut off here and continue in the next response<tool_call>
-<function=Write>
-<parameter=content>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>

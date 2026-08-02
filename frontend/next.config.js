@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: true,
-  swcMinify: true,
   images: {
-    domains: [],
     remotePatterns: [
       {
         protocol: 'https',
@@ -12,12 +11,17 @@ const nextConfig = {
     ],
   },
   webpack(config) {
-    config.externals.push({
-      'utf-8-validate': 'commonjs utf-8-validate',
-      'bufferutil': 'commonjs bufferutil',
-    })
-    return config
+    if (!config.externals) {
+      config.externals = [];
+    }
+    if (Array.isArray(config.externals)) {
+      config.externals.push({
+        'utf-8-validate': 'commonjs utf-8-validate',
+        'bufferutil': 'commonjs bufferutil',
+      });
+    }
+    return config;
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -1,7 +1,8 @@
-export const metadata = {
-  title: 'Prescription Sent',
-  description: 'Prescription has been sent for fulfilment',
-};
+"use client";
+
+import { Card } from '@/components/card';
+import { Button } from '@/components/button';
+import { CheckCircle, Circle, Clock, Mail, FileText, Printer, Download } from 'lucide-react';
 
 export default function SentPage() {
   return (
@@ -116,7 +117,7 @@ export default function SentPage() {
             <div className="flex items-start space-x-3">
               <Circle className="h-3 w-3 text-gray-400 mt-1" />
               <div>
-                <h3 className="font-medium text-gray-800">Pickup/Delivery</h>
+                <h3 className="font-medium text-gray-800">Pickup/Delivery</h3>
                 <p className="text-sm text-gray-600">
                   Patient can collect or arrange delivery
                 </p>

@@ -5,7 +5,16 @@ import * as Joi from 'joi';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthController } from './health.controller';
 import { HealthService } from './health.service';
-// Other modules will be imported here
+import { LoggerModule } from 'nestjs-pino';
+import { PrismaModule } from './prisma/prisma.module';
+import { MfaModule } from './mfa/mfa.module';
+import { SignatureModule } from './signature/signature.module';
+import { PharmacyModule } from './pharmacy/pharmacy.module';
+import { PdfModule } from './pdf/pdf.module';
+import { EmailModule } from './email/email.module';
+import { DeliveryTrackingModule } from './delivery-tracking/delivery-tracking.module';
+import { NotificationModule } from './notification/notification.module';
+import { QueueModule } from './queue/queue.module';
 
 @Module({
   imports: [
@@ -48,7 +57,15 @@ import { HealthService } from './health.service';
       },
     }),
     AuthModule,
-    // Other modules
+    PrismaModule,
+    MfaModule,
+    SignatureModule,
+    PharmacyModule,
+    PdfModule,
+    EmailModule,
+    DeliveryTrackingModule,
+    NotificationModule,
+    QueueModule,
   ],
   controllers: [HealthController],
   providers: [HealthService],

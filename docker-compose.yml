@@ -23,6 +23,8 @@ services:
       - "3001:3000"
     env_file:
       - ./backend/.env.development
+    environment:
+      - PORT=3000
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -53,4 +55,4 @@ services:
 
 volumes:
   postgres_data:
-  redis_data:
+    redis_data:
