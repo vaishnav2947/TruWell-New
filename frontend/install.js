@@ -1,1 +1,0 @@
-const { exec } = require('child_process');\nexec('npm install', (error, stdout, stderr) => {\n  if (error) {\n    console.error(`exec error: ${error}`);\n    return;\n  }\n  console.log(`stdout: ${stdout}`);\n  console.error(`stderr: ${stderr}`);\n});
